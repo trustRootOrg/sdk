@@ -192,4 +192,4 @@ Schemas are designed to ensure:
 - **Proposal Validation**: For DAO schemas, validate `proposalReference` to confirm the governance decision (e.g., via IPFS or governance contract).
 - **Security**: Validate `attestor` or `daoAddress` against known values, and ensure off-chain verifications (Nostr, TEE) are performed.
 
-See [Attestation Flow](./attestation-flow.md) for the verification process and [Best Practices](./best-practices.md) for security guidelines.
+See [Attestation Flow](./attestation-flow.md) for the verification process.

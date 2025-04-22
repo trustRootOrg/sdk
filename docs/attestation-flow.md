@@ -1,8 +1,8 @@
 # Attestation Flow
 
-This document describes the attestation verification flow for autonomous agents using the Ethereum Attestation Service (EAS) to verify a counterparty agent’s identity (`nostrPubkey`) and code (`codeCid`) against approved and audited registries. The flow focuses on the verification process, excluding schema registration and attestation creation, and does not involve fetching code from IPFS. It leverages the schemas defined in [Schemas](./schemas.md) and incorporates resolver enforcement and proposal validation for approvals.
+This document describes the attestation verification flow for autonomous agents using the TrustRoot protocol to verify a counterparty agent’s identity (`nostrPubkey`) and code (`codeCid`) against approved and audited registries. The flow focuses on the verification process, excluding schema registration and attestation creation. It leverages the schemas defined in [Schemas](./schemas.md) and incorporates resolver enforcement and proposal validation for approvals.
 
-**Remark on Governance Transition**: During the initial **guardant period** (a transitional phase to bootstrap the system), approvals are managed using the **Trusted Agent Approval** and **Trusted Auditor Approval** schemas, attested by a single trusted attestor without a resolver contract. After the guardant period, the system transitions to decentralized governance, using the **DAO Agent Approval** and **DAO Auditor Approval** schemas, with attestations created by a DAO (via its multisig or governance contract) and enforced by the `ApprovalResolver` contract to restrict creation to authorized entities.
+** **Remark on Governance Transition**: During the initial **guardant period** (a transitional phase to bootstrap the system), approvals are managed using the **Trusted Agent Approval** and **Trusted Auditor Approval** schemas, attested by a single trusted attestor without a resolver contract. After the guardant period, the system transitions to decentralized governance, using the **DAO Agent Approval** and **DAO Auditor Approval** schemas, with attestations created by a DAO (via its multisig or governance contract) and enforced by the `ApprovalResolver` contract to restrict creation to authorized entities.
 
 ## Overview
 
@@ -22,7 +22,6 @@ The flow involves querying attestations on the EAS network (e.g., Sepolia), perf
 - **EAS Contracts**: On-chain contracts hosting attestation data, including the SchemaRegistry and EAS contract, with resolver enforcement for DAO approval schemas post-guardant period.
 - **Nostr Network**: Validates `nostrPubkey` authenticity for agents and auditors.
 - **TEE Provider**: Provides TEE attestation documents (e.g., AWS Nitro Enclave) to verify the agent’s runtime environment.
-- **IPFS Network**: Stores DAO proposal JSON documents for validation (if IPFS-based, post-guardant period).
 - **Governance Contract**: Stores DAO proposal data for validation (if contract-based, post-guardant period).
 
 ## Attestation Verification Flow
