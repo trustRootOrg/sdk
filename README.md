@@ -53,7 +53,7 @@ const sdk = new SDK(wallet);
 Detailed documentation is available in the docs/ directory:
 - [Getting Started](./docs/getting-started.md): Installation and basic usage.
 - [API Reference](./docs/api-reference.md): SDK methods and interfaces.
-- [Schema](./docs/schema.md): Details about schema registration and usage.
+- [Schemas](./docs/schemas.md): Details about schema registration and usage.
 - [Attestation Flow](./docs/attestation-flow.md): Overview of the attestation process.
 - [Sequence Diagram](./docs/sequence-diagram.md): Visual representation of the attestation flow.
 
