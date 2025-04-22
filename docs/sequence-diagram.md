@@ -19,7 +19,7 @@ The flow involves interactions with EAS contracts and off-chain services (Nostr,
 
 - **Initiating Agent (Agent A)**: The agent verifying Agent B’s trustworthiness before interaction.
 - **Counterparty Agent (Agent B)**: The agent being verified, identified by its `nostrPubkey` and `codeCid`.
-- **EAS SDK**: A client-side interface for querying EAS attestations and performing off-chain verifications.
+- **TrustRoot SDK**: A client-side interface for querying EAS attestations and performing off-chain verifications.
 - **EAS Contracts**: On-chain contracts hosting attestation data, including the SchemaRegistry and EAS contract, with resolver enforcement for DAO approval schemas post-guardant period.
 - **Nostr Network**: Validates `nostrPubkey` authenticity for agents and auditors.
 - **TEE Provider**: Provides TEE attestation documents (e.g., AWS Nitro Enclave) to verify the agent’s runtime environment.
@@ -31,7 +31,7 @@ Below is the Mermaid sequence diagram representing the attestation verification 
 ```mermaid
 sequenceDiagram
     participant A as Initiating Agent (Agent A)
-    participant SDK as EAS SDK
+    participant SDK as TrustRoot SDK
     participant EAS as EAS Contracts
     participant Nostr as Nostr Network
     participant TEE as TEE Provider

@@ -1,6 +1,6 @@
 # Schemas
 
-This document describes the schemas used in the Ethereum Attestation Service (EAS) system for autonomous agents to attest and verify counterparties. Each schema defines a structured format for attestations, ensuring trust and interoperability in agent interactions. Schemas are registered on the EAS SchemaRegistry and used to create attestations for agent identities, code audits, and approvals.
+This document describes the schemas used in the TrustRoot protocol for autonomous agents to attest and verify counterparties. Each schema defines a structured format for attestations, ensuring trust and interoperability in agent interactions. Schemas are registered on the EAS SchemaRegistry and used to create attestations for agent identities, code audits, and approvals.
 
 ## Overview
 
