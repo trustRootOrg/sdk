@@ -9,18 +9,18 @@ The system uses seven schemas to support the verification of autonomous agents a
 2. **Approved Agent List Schema**: Attests that an agent is approved for interactions.
 3. **Audited Agent Code List Schema**: Attests that an agent’s code has been audited.
 4. **Approved Auditors List Schema**: Attests that an auditor is approved to audit code.
-5. **Trusted Root Agent Approval Schema**: Attests that a trusted root attestor approved an agent.
-6. **Trusted Root Auditor Approval Schema**: Attests that a trusted root attestor approved an auditor.
+5. **Trusted Agent Approval Schema**: Attests that a trusted attestor approved an agent.
+6. **Trusted Auditor Approval Schema**: Attests that a trusted attestor approved an auditor.
 7. **DAO Agent Approval Schema**: Attests that a DAO approved an agent via governance.
 8. **DAO Auditor Approval Schema**: Attests that a DAO approved an auditor via governance.
 
-**Remark on Governance Transition**: During the initial **guardant period** (a transitional phase to establish the system), the **Trusted Root Agent Approval** and **Trusted Root Auditor Approval** schemas are used, with approvals attested by a single trusted root attestor (e.g., TrustRoot organization). After the guardant period, the system transitions to decentralized governance, using the **DAO Agent Approval** and **DAO Auditor Approval** schemas, with attestations created by a DAO (via its governance contract) and enforced by a resolver contract to ensure only authorized entities create approvals.
+** **Remark on Governance Transition**: During the initial **guardant period** (a transitional phase to establish the system), the **Trusted Agent Approval** and **Trusted Auditor Approval** schemas are used, with approvals attested by a single trusted attestor (e.g., TrustRoot organization). After the guardant period, the system transitions to decentralized governance, using the **DAO Agent Approval** and **DAO Auditor Approval** schemas, with attestations created by a DAO (via its governance contract) and enforced by a resolver contract to ensure only authorized entities create approvals.
 
 
 Schemas are designed to ensure:
 - **Consistency**: Fields like `nostrPubkey` and `codeCid` align across schemas for cross-verification.
 - **Revocability**: All schemas support revocation to invalidate outdated or compromised attestations.
-- **Security**: Approval schemas use a resolver contract to restrict attestation creation to authorized entities (trusted root attestor or DAO).
+- **Security**: Approval schemas use a resolver contract to restrict attestation creation to authorized entities (TrustRoo attestor or DAO).
 - **Transparency**: Approval reasons and proposal references provide auditability.
 
 ## Schema Details
@@ -56,7 +56,7 @@ Schemas are designed to ensure:
 - `validUntil` (uint64): Unix timestamp (seconds) when the approval expires (0 for perpetual validity).
 
 **Usage**:
-- Created by an authorized attester (e.g., trusted root or DAO) to list approved agents.
+- Created by an authorized attester (e.g., TrustRoot or DAO) to list approved agents.
 - Verified by counterparties to confirm the agent’s `nostrPubkey` is approved and not expired.
 - Revocable to remove approval if the agent becomes untrusted.
 
@@ -92,45 +92,45 @@ Schemas are designed to ensure:
 - `validUntil` (uint64): Unix timestamp when the auditor’s approval expires (0 for perpetual).
 
 **Usage**:
-- Created by an authorized attester (e.g., trusted root or DAO) to list approved auditors.
+- Created by an authorized attester (e.g., TrustRoot or DAO) to list approved auditors.
 - Verified to ensure the auditor’s `auditorPubkey` is approved and not expired.
 - Revocable to remove approval if the auditor becomes untrusted.
 
 **Resolver**: None (assumes separate approval schemas enforce authorization).
 
-### 5. Trusted Root Agent Approval Schema
+### 5. Trusted Agent Approval Schema
 
-**Purpose**: Attests that a trusted root attestor (a single trusted entity) has approved an agent for inclusion in the Approved Agent List.
+**Purpose**: Attests that a TrustRoot attestor (a single trusted entity) has approved an agent for inclusion in the Approved Agent List.
 
 **Schema**: `address attestor, string nostrPubkey, string approvalReason, uint64 validUntil`
 
 **Fields**:
-- `attestor` (address): The Ethereum address of the trusted root attestor (e.g., `0xTrustedAttestorAddress`).
+- `attestor` (address): The Ethereum address of the TrustRoot attestor (e.g., `0xTrustedAttestorAddress`).
 - `nostrPubkey` (string): The Nostr public key of the approved agent, matching the Approved Agent List.
 - `approvalReason` (string): A description of why the agent is approved (e.g., "Verified by TrustedOrg").
 - `validUntil` (uint64): Unix timestamp when the approval expires (0 for perpetual).
 
 **Usage**:
-- Created by the trusted root attestor to authorize an agent’s inclusion in the Approved Agent List.
+- Created by the TrustRoot attestor to authorize an agent’s inclusion in the Approved Agent List.
 - Verified to confirm the `attestor` matches the known trusted address and the `nostrPubkey` is approved.
 - Revocable to invalidate if the agent or attestor is compromised.
 
 **Resolver**: `ApprovalResolver` contract, restricting attestation creation to the `attestor` address.
 
-### 6. Trusted Root Auditor Approval Schema
+### 6. Trusted Auditor Approval Schema
 
-**Purpose**: Attests that a trusted root attestor has approved an auditor for inclusion in the Approved Auditors List.
+**Purpose**: Attests that a TrustRoot attestor has approved an auditor for inclusion in the Approved Auditors List.
 
 **Schema**: `address attestor, string auditorPubkey, string approvalReason, uint64 validUntil`
 
 **Fields**:
-- `attestor` (address): The Ethereum address of the trusted root attestor.
+- `attestor` (address): The Ethereum address of the TrustRoot attestor.
 - `auditorPubkey` (string): The Nostr public key of the approved auditor, matching the Approved Auditors List.
 - `approvalReason` (string): A description of why the auditor is approved (e.g., "Certified by TrustedOrg").
 - `validUntil` (uint64): Unix timestamp when the approval expires (0 for perpetual).
 
 **Usage**:
-- Created by the trusted root attestor to authorize an auditor.
+- Created by the TrustRoot attestor to authorize an auditor.
 - Verified to confirm the `attestor` is trusted and the `auditorPubkey` is approved.
 - Revocable to invalidate if the auditor or attestor is compromised.
 
@@ -180,15 +180,15 @@ Schemas are designed to ensure:
 
 - **Consistency**: `nostrPubkey`, `auditorPubkey`, and `codeCid` fields align across schemas to enable cross-verification.
 - **Revocability**: All schemas are revocable to handle trust changes.
-- **Authorization**: Approval schemas (Trusted Root and DAO) use a resolver to restrict attestation creation to authorized entities.
+- **Authorization**: Approval schemas use TrustRoot or DAO resolver to restrict attestation creation to authorized entities.
 - **Transparency**: `approvalReason` and `proposalReference` fields provide context for approvals, enhancing auditability.
 - **Time-Bound Approvals**: `validUntil` allows expiration of approvals, supporting temporary trust.
-- **Extensibility**: Schemas support both Trusted Root and DAO governance models, adaptable to future governance mechanisms.
+- **Extensibility**: Schemas support both TrustRoot and DAO governance models, adaptable to future governance mechanisms.
 
 ## Usage Guidelines
 
 - **Verification**: Counterparties verify attestations by checking schema fields, ensuring non-revocation, non-expiration, and consistency across schemas.
-- **Resolver Enforcement**: Approval schemas rely on the `ApprovalResolver` contract to ensure only the trusted root attestor or DAO can create attestations.
+- **Resolver Enforcement**: Approval schemas rely on the `ApprovalResolver` contract to ensure only the TrustRoot attestor or DAO can create attestations.
 - **Proposal Validation**: For DAO schemas, validate `proposalReference` to confirm the governance decision (e.g., via IPFS or governance contract).
 - **Security**: Validate `attestor` or `daoAddress` against known values, and ensure off-chain verifications (Nostr, TEE) are performed.
 

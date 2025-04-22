@@ -2,14 +2,14 @@
 
 This document describes the attestation verification flow for autonomous agents using the Ethereum Attestation Service (EAS) to verify a counterparty agent’s identity (`nostrPubkey`) and code (`codeCid`) against approved and audited registries. The flow focuses on the verification process, excluding schema registration and attestation creation, and does not involve fetching code from IPFS. It leverages the schemas defined in [Schemas](./schemas.md) and incorporates resolver enforcement and proposal validation for approvals.
 
-**Remark on Governance Transition**: During the initial **guardant period** (a transitional phase to bootstrap the system), approvals are managed using the **Trusted Root Agent Approval** and **Trusted Root Auditor Approval** schemas, attested by a single trusted root attestor without a resolver contract. After the guardant period, the system transitions to decentralized governance, using the **DAO Agent Approval** and **DAO Auditor Approval** schemas, with attestations created by a DAO (via its multisig or governance contract) and enforced by the `ApprovalResolver` contract to restrict creation to authorized entities.
+**Remark on Governance Transition**: During the initial **guardant period** (a transitional phase to bootstrap the system), approvals are managed using the **Trusted Agent Approval** and **Trusted Auditor Approval** schemas, attested by a single trusted attestor without a resolver contract. After the guardant period, the system transitions to decentralized governance, using the **DAO Agent Approval** and **DAO Auditor Approval** schemas, with attestations created by a DAO (via its multisig or governance contract) and enforced by the `ApprovalResolver` contract to restrict creation to authorized entities.
 
 ## Overview
 
 The attestation flow enables an **Initiating Agent (Agent A)** to verify a **Counterparty Agent (Agent B)** before interaction (e.g., data exchange via Nostr). The process ensures:
 - Agent B’s identity (`nostrPubkey`) is approved.
 - Agent B’s code (`codeCid`) is audited by an approved auditor.
-- Approvals are authorized by a trusted root attestor (during guardant period) or a DAO with resolver enforcement (post-guardant period).
+- Approvals are authorized by a trusted attestor (during guardant period) or a DAO with resolver enforcement (post-guardant period).
 - DAO approvals are validated via governance proposals.
 
 The flow involves querying attestations on the EAS network (e.g., Sepolia), performing off-chain verifications (Nostr, TEE), and validating DAO proposals (via IPFS or governance contracts). If any step fails, the interaction is rejected.
@@ -27,7 +27,7 @@ The flow involves querying attestations on the EAS network (e.g., Sepolia), perf
 
 ## Attestation Verification Flow
 
-The verification flow is a sequential process with conditional checks. Agent A rejects the interaction if any step fails (e.g., attestation is invalid, revoked, expired, or proposal is invalid). The flow adapts based on whether the system is in the guardant period (Trusted Root) or post-guardant period (DAO with resolver).
+The verification flow is a sequential process with conditional checks. Agent A rejects the interaction if any step fails (e.g., attestation is invalid, revoked, expired, or proposal is invalid). The flow adapts based on whether the system is in the guardant period (Trusted) or post-guardant period (DAO with resolver).
 
 ### 1. Validate Autonomous Agent Attestation
 - **Purpose**: Confirm Agent B’s identity, code, and runtime environment.
@@ -51,26 +51,26 @@ The verification flow is a sequential process with conditional checks. Agent A r
     - The `nostrPubkey` matches the one from the Autonomous Agent attestation.
   - If valid, Agent A proceeds to verify the approval’s authorization; otherwise, the interaction is rejected.
 
-### 3. Validate Agent Approval (Trusted Root or DAO)
-- **Purpose**: Confirm the agent’s approval was authorized by a trusted root attestor (guardant period) or a DAO (post-guardant period).
+### 3. Validate Agent Approval (Trusted Attestor or DAO)
+- **Purpose**: Confirm the agent’s approval was authorized by a trusted attestor (guardant period) or a DAO (post-guardant period).
 - **Schemas**:
-  - Trusted Root Agent Approval (`address attestor, string nostrPubkey, string approvalReason, uint64 validUntil`).
+  - Trusted Agent Approval (`address attestor, string nostrPubkey, string approvalReason, uint64 validUntil`).
   - DAO Agent Approval (`address daoAddress, string nostrPubkey, string approvalReason, uint64 validUntil, string proposalReference`).
 - **Steps**:
-  - Agent A determines whether to check Trusted Root (guardant period) or DAO (post-guardant period) approval.
-  - **Trusted Root (Guardant Period)**:
-    - Query the Trusted Root Agent Approval attestation by its UID.
+  - Agent A determines whether to check Trusted Attestor (guardant period) or DAO (post-guardant period) approval.
+  - **Trusted (Guardant Period)**:
+    - Query the Trusted Agent Approval attestation by its UID.
     - Verify the attestation is valid, not revoked, and not expired (`validUntil`).
     - Confirm the `attestor` matches the known trusted attestor address (e.g., `0xTrustedAttestorAddress`).
     - Ensure the `nostrPubkey` matches the Approved Agent List and Autonomous Agent attestations.
-    - No resolver contract is used, as the trusted root attestor is assumed secure.
+    - No resolver contract is used, as the trusted attestor is assumed secure.
   - **DAO (Post-Guardant Period)**:
     - Query the DAO Agent Approval attestation by its UID.
     - Verify the attestation is valid, not revoked, and not expired (`validUntil`).
     - Confirm the `daoAddress` matches the DAO’s multisig or governance contract address (e.g., `0xDAOMultisigAddress`).
     - Ensure the `nostrPubkey` matches the Approved Agent List and Autonomous Agent attestations.
     - The `ApprovalResolver` contract ensures the attestation was created by the `daoAddress`.
-  - If valid, proceed to proposal validation (DAO only) or audited code verification (Trusted Root); otherwise, reject.
+  - If valid, proceed to proposal validation (DAO only) or audited code verification (Trusted Auditor); otherwise, reject.
 
 ### 4. Validate DAO Agent Proposal (DAO Only, Post-Guardant Period)
 - **Purpose**: Confirm the DAO’s approval is backed by a legitimate governance proposal.
@@ -111,14 +111,14 @@ The verification flow is a sequential process with conditional checks. Agent A r
     - The `auditorPubkey` matches the `auditor` from the Audited Agent Code List.
   - If valid, proceed to auditor approval verification; otherwise, reject.
 
-### 7. Validate Auditor Approval (Trusted Root or DAO)
+### 7. Validate Auditor Approval (Trusted or DAO)
 - **Purpose**: Confirm the auditor’s approval was authorized.
 - **Schemas**:
-  - Trusted Root Auditor Approval (`address attestor, string auditorPubkey, string approvalReason, uint64 validUntil`).
+  - Trusted Auditor Approval (`address attestor, string auditorPubkey, string approvalReason, uint64 validUntil`).
   - DAO Auditor Approval (`address daoAddress, string auditorPubkey, string approvalReason, uint64 validUntil, string proposalReference`).
 - **Steps**:
-  - **Trusted Root (Guardant Period)**:
-    - Query the Trusted Root Auditor Approval attestation.
+  - **Trusted (Guardant Period)**:
+    - Query the Trusted Auditor Approval attestation.
     - Verify validity, non-revocation, and non-expiration (`validUntil`).
     - Confirm the `attestor` matches the trusted attestor address.
     - Ensure the `auditorPubkey` matches the Approved Auditors List.
@@ -129,7 +129,7 @@ The verification flow is a sequential process with conditional checks. Agent A r
     - Confirm the `daoAddress` matches the DAO’s address.
     - Ensure the `auditorPubkey` matches the Approved Auditors List.
     - The `ApprovalResolver` contract ensures the attestation was created by the `daoAddress`.
-  - If valid, proceed to proposal validation (DAO only) or off-chain verification (Trusted Root); otherwise, reject.
+  - If valid, proceed to proposal validation (DAO only) or off-chain verification (Trusted); otherwise, reject.
 
 ### 8. Validate DAO Auditor Proposal (DAO Only, Post-Guardant Period)
 - **Purpose**: Confirm the DAO’s auditor approval is backed by a legitimate proposal.
@@ -160,12 +160,12 @@ The verification flow is a sequential process with conditional checks. Agent A r
 ## Security Considerations
 
 - **Resolver Enforcement (Post-Guardant Period)**: The `ApprovalResolver` contract ensures only the DAO can create DAO approval attestations, preventing unauthorized approvals.
-- **Trusted Root Security (Guardant Period)**: Verify the `attestor` address matches the known trusted root attestor, and secure its private key.
+- **Trusted Security (Guardant Period)**: Verify the `attestor` address matches the known trusted attestor, and secure its private key.
 - **Proposal Validation (Post-Guardant Period)**: Validate `proposalReference` using trusted IPFS nodes or verified governance contracts to ensure DAO approvals reflect legitimate decisions.
 - **Cross-Schema Consistency**:
-  - Match `nostrPubkey` across Autonomous Agent, Approved Agent List, and Trusted Root/DAO Agent Approval schemas.
+  - Match `nostrPubkey` across Autonomous Agent, Approved Agent List, and Trusted/DAO Agent Approval schemas.
   - Match `codeCid` across Autonomous Agent and Audited Agent Code List schemas.
-  - Match `auditorPubkey` across Audited Agent Code List, Approved Auditors List, and Trusted Root/DAO Auditor Approval schemas.
+  - Match `auditorPubkey` across Audited Agent Code List, Approved Auditors List, and Trusted/DAO Auditor Approval schemas.
 - **Revocation and Expiration**: Check all attestations for revocation and ensure `validUntil` is current.
 - **Off-Chain Verification**: Use secure Nostr relays and TEE providers to prevent spoofing or tampering.
 - **Trusted Addresses**: Verify `attestor` (guardant period) or `daoAddress` (post-guardant period) against known values.
