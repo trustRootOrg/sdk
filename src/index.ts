@@ -1,0 +1,9 @@
+import * as Contracts from './contracts/index';
+export {Contracts};
+import {SDK, IAttestation, IAttestationData, ISchemaConfig} from './sdk';;
+export {SDK, IAttestation, IAttestationData, ISchemaConfig};
+export {EASNetworks, INetworkConfig, getNetworkConfig} from './networks';
+export default {
+    Contracts,
+    SDK
+};
