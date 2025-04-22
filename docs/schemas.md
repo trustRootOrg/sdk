@@ -20,7 +20,7 @@ The system uses seven schemas to support the verification of autonomous agents a
 Schemas are designed to ensure:
 - **Consistency**: Fields like `nostrPubkey` and `codeCid` align across schemas for cross-verification.
 - **Revocability**: All schemas support revocation to invalidate outdated or compromised attestations.
-- **Security**: Approval schemas use a resolver contract to restrict attestation creation to authorized entities (TrustRoo attestor or DAO).
+- **Security**: Approval schemas use a resolver contract to restrict attestation creation to authorized entities (TrustRoot attestor or DAO).
 - **Transparency**: Approval reasons and proposal references provide auditability.
 
 ## Schema Details
