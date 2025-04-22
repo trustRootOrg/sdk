@@ -37,6 +37,36 @@ Execute the unit tests using the following command:
 ```bash
 npm run test
 ```
+## Quick Start
+```typescript
+import { SDK } from '@trustroot/sdk';
+import { Wallet } from '@ijstech/eth-wallet';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
+const wallet = new Wallet(process.env.RPC_URL!, { privateKey: process.env.PRIVATE_KEY! });
+const sdk = new SDK(wallet);
+```
+
+## Documentation
+Detailed documentation is available in the docs/ directory:
+- [Getting Started](./docs/getting-started.md): Installation and basic usage.
+
+- [API Reference](./docs/api-reference.md): SDK methods and interfaces.
+
+- Best Practices (./docs/best-practices.md): Security and optimization tips.
+
+
+## Supported Networks
+- Ethereum Mainnet (Chain ID: 1)
+- Sepolia Testnet (Chain ID: 11155111)
+- Optimism (Chain ID: 10)
+- Arbitrum One (Chain ID: 42161)
+- Base (Chain ID: 8453)
+
+See [networks.ts](./src/networks.ts) for contract addresses and details.
+
 
 ## License
 
