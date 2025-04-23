@@ -1,5 +1,9 @@
 {
     "type":"contract",
+    "dependencies": {
+        "@ijstech/eth-contract": "^0.1.8",
+        "@ijstech/eth-wallet": "^0.1.29"
+    },
     "solidity": {
         "version": "0.8.19",
         "optimizerRuns": 999999,
