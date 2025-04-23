@@ -533,7 +533,7 @@ declare module "@trustroot/sdk/networks.ts" {
 }
 /// <amd-module name="@trustroot/sdk/sdk.ts" />
 declare module "@trustroot/sdk/sdk.ts" {
-    import { Wallet } from "@ijstech/eth-wallet";
+    import { IWallet } from "@ijstech/eth-wallet";
     export interface ISchemaConfig {
         schema: string;
         revocable: boolean;
@@ -572,7 +572,7 @@ declare module "@trustroot/sdk/sdk.ts" {
         private network;
         private easContract;
         private schemaRegistryContract;
-        constructor(wallet: Wallet);
+        constructor(wallet: IWallet);
         registerSchema(config: ISchemaConfig): Promise<{
             uid: string;
             transactionHash: string;

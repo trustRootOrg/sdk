@@ -1,4 +1,4 @@
-import { Wallet } from "@ijstech/eth-wallet";
+import { IWallet } from "@ijstech/eth-wallet";
 export interface ISchemaConfig {
     schema: string;
     revocable: boolean;
@@ -37,7 +37,7 @@ export declare class SDK {
     private network;
     private easContract;
     private schemaRegistryContract;
-    constructor(wallet: Wallet);
+    constructor(wallet: IWallet);
     registerSchema(config: ISchemaConfig): Promise<{
         uid: string;
         transactionHash: string;

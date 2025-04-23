@@ -1,5 +1,5 @@
 {
-    "type":"contract",
+    "type": "contract",
     "dependencies": {
         "@ijstech/eth-contract": "^0.1.8",
         "@ijstech/eth-wallet": "^0.1.29"
@@ -10,5 +10,6 @@
         "sourceDir": "contracts",
         "outputDir": "src/contracts",
         "outputObjects": "bytecode"
-    }
+    },
+    "version": "0.1.1"
 }
