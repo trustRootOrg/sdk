@@ -436,7 +436,7 @@ define("@trustroot/sdk/networks.ts", ["require", "exports"], function (require, 
     };
     exports.getNetworkConfig = getNetworkConfig;
 });
-define("@trustroot/sdk/sdk.ts", ["require", "exports", "@trustroot/sdk", "@trustroot/sdk/networks.ts"], function (require, exports, index_1, networks_1) {
+define("@trustroot/sdk/sdk.ts", ["require", "exports", "@trustroot/sdk/contracts/index.ts", "@trustroot/sdk/networks.ts"], function (require, exports, index_1, networks_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.SDK = void 0;
@@ -449,8 +449,8 @@ define("@trustroot/sdk/sdk.ts", ["require", "exports", "@trustroot/sdk", "@trust
             this.wallet = wallet;
             let network = (0, networks_1.getNetworkConfig)(wallet.chainId);
             // Initialize contracts
-            this.easContract = new index_1.Contracts.EAS(wallet, network.easContractAddress);
-            this.schemaRegistryContract = new index_1.Contracts.REGISTRY(wallet, network.schemaRegistryAddress);
+            this.easContract = new index_1.EAS(wallet, network.easContractAddress);
+            this.schemaRegistryContract = new index_1.REGISTRY(wallet, network.schemaRegistryAddress);
         }
         ;
         // Register a schema
