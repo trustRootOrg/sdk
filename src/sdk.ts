@@ -1,5 +1,5 @@
-import { Contracts } from "./index";
-import { Wallet } from "@ijstech/eth-wallet";
+import { EAS, REGISTRY } from "./contracts/index";
+import { IWallet } from "@ijstech/eth-wallet";
 import { INetworkConfig, getNetworkConfig } from "./networks";
 
 // Interfaces for type safety
@@ -39,17 +39,17 @@ export interface IAttestation {
 };
 
 export class SDK {
-    private wallet: Wallet;
+    private wallet: IWallet;
     private network: INetworkConfig;
-    private easContract: Contracts.EAS;
-    private schemaRegistryContract: Contracts.REGISTRY;
+    private easContract: EAS;
+    private schemaRegistryContract: REGISTRY;
 
-    constructor(wallet: Wallet) {
+    constructor(wallet: IWallet) {
         this.wallet = wallet;
         let network = getNetworkConfig(wallet.chainId)
         // Initialize contracts
-        this.easContract = new Contracts.EAS(wallet, network.easContractAddress);
-        this.schemaRegistryContract = new Contracts.REGISTRY(wallet, network.schemaRegistryAddress);
+        this.easContract = new EAS(wallet, network.easContractAddress);
+        this.schemaRegistryContract = new REGISTRY(wallet, network.schemaRegistryAddress);
     };
     // Register a schema
     async registerSchema(config: ISchemaConfig): Promise<{ uid: string, transactionHash: string }> {
