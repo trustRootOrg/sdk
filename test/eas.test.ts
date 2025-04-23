@@ -16,7 +16,6 @@ describe('EAS', function() {
     let schemaUID: string = '';
     let attestationUID: string = '';    
     const message = "Hello, EAS!";
-    return;
     before(async ()=>{
         wallet = new Wallet(Config.provider,  Config.accounts);
         accounts = await wallet.accounts;

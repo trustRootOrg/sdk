@@ -1,0 +1,22 @@
+{
+    "name": "@scom/demo-dapp",
+    "version": "0.1.0",
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "devDependencies": {
+        "@ijstech/cli": "^0.1.33",
+        "@ijstech/compiler": "^0.1.41",
+        "@ijstech/components": "^0.1.57",
+        "@ijstech/eth-contract": "^0.1.18",
+        "@ijstech/eth-wallet": "^0.1.108",
+        "@scom/dapp": "^0.1.21",
+        "@trustroot/sdk": "file:repos/sdk"
+    },
+    "scripts": {
+        "build": "rm -rf dist && npx @ijstech/compiler",
+        "preinstall": "rm -rf repos && mkdir -p repos/sdk && cp ../../package.json repos/sdk && cp -r ../../dist repos/sdk && cp -r ../../lib repos/sdk && cp -r ../../pluginTypes repos/sdk && cp -r ../../types repos/sdk",
+        "serve": "npx @ijstech/cli serve 8080",
+        "test": "npm run build && npm run serve"
+    }
+}

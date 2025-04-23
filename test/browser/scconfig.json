@@ -1,0 +1,52 @@
+{
+    "env": "testnet",
+    "type": "dapp",
+    "logo": "logo",
+    "main": "@scom/dapp",
+    "assets": "@modules/assets",
+    "moduleDir": "modules",
+    "modules": {
+        "@modules/assets": {
+            "path": "assets"
+        },
+        "@modules/module1": {
+            "path": "module1"
+        }
+    },
+    "dependencies": {},
+    "menus": [
+        {
+            "caption": "Module 1",
+            "url": "/module1",
+            "module": "@modules/module1",
+            "params": {},
+            "menus": []
+        }
+    ],
+    "routes": [
+        {
+            "url": "/module1",
+            "module": "@modules/module1",
+            "default": true
+        }
+    ],
+    "networks": [
+        {
+            "chainId": 11155111
+        }
+    ],
+    "wallets": [
+        {
+            "name": "metamask"
+        }
+    ],
+    "header": {
+        "fixed": true,
+        "hideNetworkButton": false,
+        "hideWalletBalance": false
+    },
+    "requireLogin": true,
+    "footer": {
+        "hasLogo": true
+    }
+}
