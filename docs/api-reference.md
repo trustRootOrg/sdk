@@ -21,7 +21,7 @@ Schema details.
 Data for creating an attestation.
 
 - `schemaTypes`: `string[]` - Schema types (e.g., ["string"]).
-- `values`: `any[]` - Data values matching schema types (e.g., ["Hello, EAS!"]).
+- `values`: `any[]` - Data values matching schema types (e.g., ["Hello, TrustRoot!"]).
 - `recipient?`: `string` - Recipient address (default: zero address).
 - `expirationTime?`: `number` - Expiration timestamp (default: 0).
 - `revocable?`: `boolean` - Whether attestation is revocable (default: true).
@@ -92,7 +92,7 @@ Creates a new attestation.
 ```typescript
 const attestationData: IAttestationData = {
     schemaTypes: ["string"],
-    values: ["Hello, EAS!"],
+    values: ["Hello, TrustRoot!"],
     recipient: "0xRecipientAddress",
     expirationTime: 0,
     revocable: true
@@ -141,7 +141,7 @@ const isValid = await sdk.validateAttestation(
     "0x1234...5678",
     "0x9012...3456",
     ["string"],
-    ["Hello, EAS!"]
+    ["Hello, TrustRoot!"]
 );
 console.log(isValid);
 ```
